@@ -1,0 +1,59 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <style>
+        ul{
+            list-style-type: none;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm">
+            <h6>Centre de beauté **</h6>
+            <p>Adresse: ...</p>
+            <p>Tél: ...</p>
+        </div>
+        <div class="col-sm">
+            <h6>Destinataire:</h6>
+            <p>{{ rdv.client.nom }} {{ rdv.client.prenom }}</p>
+        </div>
+    </div>
+    <hr>
+    <h1>Bon de commande N°: {{ rdv.id }}</h1>
+    <table class="table table-bordered thead-dark">
+        <tr>
+            <td>Réf</td>
+            <td>Services</td>
+            <td>Quantité</td>
+            <td>Prix</td>
+        </tr>
+        {% for service in rdv.rdvServices %}
+            <tr>
+                <td>{{ service.service.id }}</td>
+                <td>{{ service.service.nomService }}
+                    <ul>
+                        <strong>Options:</strong>
+                        {% for option in service.option%}
+                            <li>{{ option.option.nom }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+                <td>1</td>
+                <td>...</td>
+            </tr>
+        {% endfor %}
+        <tr>
+            <td colspan="4" class="pull-right"> Total: ... &euro;</td>
+        </tr>
+    </table>
+
+</div>
+<div class="footer">
+    <hr>
+    <p>Fait à Paris, le {{ "now"|date("d/m/Y") }}</p>
+</div>
+</body>
+</html>

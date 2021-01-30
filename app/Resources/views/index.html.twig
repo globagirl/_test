@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+{% block title %}Accueil{% endblock %}
+{% block pagename %}Accueil{% endblock %}
+{% block body %}
+    <h1>Bienvenue</h1>
+    <hr>
+    <h5> Espace Client:</h5>
+    <a href="{{ path('ajouter_RDV')}}">Ajouter un Rendez-vous</a>
+    <h5> Espace Administrateur:</h5>
+    <a href="{{ path('liste_RDV')}}">Liste des Rendez-vous</a>
+{% endblock %}
+

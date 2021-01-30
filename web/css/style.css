@@ -1,0 +1,369 @@
+/*
+Author: W3layout
+Author URL: http://w3layouts.com
+License: Creative Commons Attribution 3.0 Unported
+License URL: http://creativecommons.org/licenses/by/3.0/
+*/
+/*--reset--*/
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,dl,dt,dd,ol,nav ul,nav li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline;}
+article, aside, details, figcaption, figure,footer, header, hgroup, menu, nav, section {display: block;}
+ol,ul{list-style:none;margin:0px;padding:0px;}
+blockquote,q{quotes:none;}
+blockquote:before,blockquote:after,q:before,q:after{content:'';content:none;}
+table{border-collapse:collapse;border-spacing:0;}
+/*--start editing from here--*/
+a{text-decoration:none;}
+.txt-rt{text-align:right;}/* text align right */
+.txt-lt{text-align:left;}/* text align left */
+.txt-center{text-align:center;}/* text align center */
+.float-rt{float:right;}/* float right */
+.float-lt{float:left;}/* float left */
+.clear{clear:both;}/* clear float */
+.pos-relative{position:relative;}/* Position Relative */
+.pos-absolute{position:absolute;}/* Position Absolute */
+.vertical-base{	vertical-align:baseline;}/* vertical align baseline */
+.vertical-top{	vertical-align:top;}/* vertical align top */
+nav.vertical ul li{	display:block;}/* vertical menu */
+nav.horizontal ul li{	display: inline-block;}/* horizontal menu */
+img{max-width:100%;}
+/*--end reset--*/
+body{
+	font-family: 'Signika', sans-serif;
+	background: url(../images/2.jpg)no-repeat center top;
+    background-size: cover;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+	background-attachment:fixed;
+}
+.bg-agile {
+    width: 44%;
+    margin: 0 auto;
+}
+
+h1 {
+    font-size: 3em;
+    color: #fff;
+    letter-spacing: 1px;
+    text-align: center;
+    padding: .5em 0 .8em;
+}
+/*--appointment--*/
+.book-appointment h2 {
+    text-align: center;
+    font-size: 1.8em;
+    color: #fff;
+    margin-bottom: 1.5em;
+    font-weight: 500;
+    letter-spacing: 2px;
+}
+.book-appointment {
+    background:rgba(20, 20, 21, 0.47);
+    padding: 3em;
+}
+.book-appointment input[type="text"], .book-appointment input[type="email"], textarea {
+    width: 96.5%;
+    color: #fff;
+    outline: none;
+    font-size: .9em;
+    line-height: 25px;
+    padding: 5px 10px;
+    border: none;
+    -webkit-appearance: none;
+    margin: .3em 0em 1em;
+    font-family: 'Signika', sans-serif;
+    background: rgba(237, 237, 237, 0.54);
+}
+textarea {
+	resize:none;
+	height:25px
+}
+.book-appointment select.book-form-control {
+    outline: none;
+    font-size: .9em;
+    padding: 7px 10px;
+    width: 100%;
+	margin: 5px 0px 16px;
+    border-radius: 0;
+	background: rgba(237, 237, 237, 0.54);
+    color: #fff;
+    border: none;
+    font-family: 'Signika', sans-serif;
+}
+.book-appointment select.book-form-control option {
+	 background:#111;
+ }
+
+input[type=button ] {
+    display: block;
+    color: #fff;
+    margin: 0 auto;
+    margin-top: 2em;
+    padding: .8em 2em;
+    font-size: 1.04em;
+    cursor: pointer;
+    letter-spacing: 1px;
+    border: none;
+    outline: none;
+    background: #128646;
+    font-weight: 500;
+    font-family: 'Signika', sans-serif;
+    transition: 0.5s all ease;
+    -webkit-transition: 0.5s all ease;
+    -moz-transition: 0.5s all ease;
+    -o-transition: 0.5s all ease;
+    -ms-transition: 0.5s all ease;
+}
+input[type=button]:hover {
+    background: #24ad61;
+    transition: 0.5s all ease;
+    -webkit-transition: 0.5s all ease;
+    -moz-transition: 0.5s all ease;
+    -o-transition: 0.5s all ease;
+    -ms-transition: 0.5s all ease;
+}
+
+.book-appointment p {
+    color: #fff;
+    font-size: 1em;
+    letter-spacing: 1px;
+}
+.gaps {
+    background:#54ecbb3d;
+    margin: 1em 0;
+    padding: 1em .5em 0;
+}
+/*--//appointment--*/
+
+/*--copyright--*/
+.copy.w3ls {
+    margin: 2.5em 0;
+    text-align: center;
+}
+.copy p {
+    color: #fff;
+    font-size: 1em;
+    letter-spacing: 2px;
+}
+.copy p a {
+    color: #f74b55;
+    text-decoration: none;
+	transition: 0.5s all ease;
+    -webkit-transition: 0.5s all ease;
+    -moz-transition: 0.5s all ease;
+    -o-transition: 0.5s all ease;
+    -ms-transition: 0.5s all ease;
+}
+.copy p a:hover {
+    color: #fff;
+	transition: 0.5s all ease;
+    -webkit-transition: 0.5s all ease;
+    -moz-transition: 0.5s all ease;
+    -o-transition: 0.5s all ease;
+    -ms-transition: 0.5s all ease;
+}
+
+.pull-right {
+	float: right !important;
+
+}
+/*--//copyright--*/
+
+/*--responsive--*/
+
+@media(max-width: 1680px){
+
+}
+@media(max-width: 1600px){
+
+}
+@media(max-width: 1440px){
+	
+}
+@media(max-width: 1366px){
+	.bg-agile {
+		width: 47%;
+	}
+}
+@media(max-width: 1280px){
+	.bg-agile {
+		width: 50%;
+	}
+	.book-appointment input[type="text"], .book-appointment input[type="date"], .book-appointment input[type="time"], .book-appointment input[type="email"], textarea {
+		width: 96%;
+	}
+}
+@media(max-width: 1080px){
+	h1 {
+		font-size: 2.8em;
+	}
+	.bg-agile {
+		width: 56%;
+	}
+}
+@media(max-width: 1050px){
+
+}
+@media(max-width: 1024px){
+	.bg-agile {
+		width: 58%;
+	}
+}
+@media(max-width: 991px){
+	.book-appointment input[type="text"], .book-appointment input[type="date"], .book-appointment input[type="time"], .book-appointment input[type="email"], textarea {
+		width: 95.5%;
+	}
+}
+@media(max-width: 900px){
+	h1 {
+		font-size: 2.6em;
+	}
+	.book-appointment h2 {
+		font-size: 1.7em;
+	}
+	.bg-agile {
+		width: 66%;
+	}
+	.book-appointment input[type="text"], .book-appointment input[type="date"], .book-appointment input[type="time"], .book-appointment input[type="email"], textarea {
+		width: 96%;
+	}
+}
+@media(max-width: 800px){
+	h1 {
+		font-size: 2.5em;
+	}
+	.bg-agile {
+		width: 72%;
+	}
+}
+@media(max-width: 768px){
+	.book-appointment input[type="text"], .book-appointment input[type="date"], .book-appointment input[type="time"], .book-appointment input[type="email"], textarea {
+		width: 95.5%;
+	}
+	.bg-agile {
+		width: 74%;
+	}
+}
+@media(max-width: 736px){
+	.bg-agile {
+		width: 76%;
+	}
+	.copy p {
+		line-height: 2;
+	}
+}
+@media(max-width: 667px){
+	h1 {
+		font-size: 2.4em;
+	}
+	.book-appointment {
+		padding: 2em;
+	}
+	.book-appointment h2 {
+		margin-bottom: 1.2em;
+	}
+	.bg-agile {
+		width: 78%;
+	}
+	.copy.w3ls {
+		margin: 2em 0;
+	}
+}
+@media(max-width: 640px){
+	h1 {
+		letter-spacing: 0px;
+	}
+	.bg-agile {
+		width: 81%;
+	}
+}
+@media(max-width: 600px){
+	.book-appointment input[type="text"], .book-appointment input[type="date"], .book-appointment input[type="time"], .book-appointment input[type="email"], textarea {
+		width: 95%;
+	}
+}
+@media(max-width: 568px){
+	h1 {
+		font-size: 2.1em;
+	}
+	.copy p {
+		letter-spacing: 1px;
+	}
+	.book-appointment input[type="text"], .book-appointment input[type="date"], .book-appointment input[type="time"], .book-appointment input[type="email"], textarea {
+		width: 94.5%;
+	}
+}
+@media(max-width: 480px){
+	h1 {
+		font-size: 1.8em;
+	}
+	.book-appointment h2 {
+		font-size: 1.5em;
+		letter-spacing: 1px;
+	}
+	.bg-agile {
+		width: 90%;
+	}
+	input[type=button] {
+		padding: .7em 1.5em;
+		font-size: 1em;
+	}
+	.book-appointment input[type="text"], .book-appointment input[type="date"], .book-appointment input[type="time"], .book-appointment input[type="email"], textarea {
+		width: 94%;
+	}
+}
+@media(max-width: 440px){
+
+}
+@media(max-width: 414px){
+	h1 {
+		font-size: 1.65em;
+	}
+	.book-appointment h2 {
+		font-size: 1.4em;
+	}
+	.book-appointment input[type="text"], .book-appointment input[type="date"], .book-appointment input[type="time"], .book-appointment input[type="email"], textarea {
+		width: 93%;
+	}
+	.book-appointment p {
+		font-size: .95em;
+		letter-spacing: 0px;
+	}
+	.copy.w3ls {
+		margin: 1.5em 0;
+	}
+}
+@media(max-width: 384px){
+	h1 {
+		font-size: 1.5em;
+	}
+	.copy p {
+		font-size: .9em;
+	}
+	.book-appointment input[type="text"], .book-appointment input[type="date"], .book-appointment input[type="time"], .book-appointment input[type="email"], textarea {
+		width: 92%;
+	}
+}
+@media(max-width: 375px){
+	.book-appointment h2 {
+		font-size: 1.3em;
+	}
+	.book-appointment {
+		padding: 1.5em;
+	}
+}
+@media(max-width: 320px){
+	input[type=button] {
+		padding: .8em 1em;
+		font-size: .9em;
+		margin-top: 1.5em;
+	}
+	.book-appointment input[type="text"], .book-appointment input[type="date"], .book-appointment input[type="time"], .book-appointment input[type="email"], textarea {
+		width: 90%;
+	}
+	h1 {
+		line-height: 1.4;
+	}
+}
+
+/*--//responsive--*/

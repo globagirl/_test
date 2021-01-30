@@ -1,0 +1,8 @@
+app:
+    resource: '@AppBundle/Controller/'
+    type: annotation
+
+request_options:
+    path:     /request_options
+    defaults: { _controller: AppBundle:option:index }
+

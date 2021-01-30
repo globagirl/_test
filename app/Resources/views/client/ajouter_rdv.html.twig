@@ -1,0 +1,171 @@
+{% extends 'base.html.twig' %}
+{% block title %}Centre de beauté: Rendez-vous{% endblock %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}" type='text/css' />
+{% endblock %}
+{% block body %}
+    <h1>Centre de beauté</h1>
+    <div class="bg-agile">
+        {% for message in app.flashes('notice_success') %}
+            <div class="alert alert-dismissible alert-success" id="alert">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <h4 class="alert-heading">Merci</h4>
+                <p class="mb-0">{{ message }}</p>
+            </div>
+        {% endfor %}
+        {% for message in app.flashes('error_synth') %}
+            <div class="alert alert-dismissible alert-danger" id="alert">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <h4 class="alert-heading">Erreur!</h4>
+                <p class="mb-0">{{ message }}</p>
+            </div>
+        {% endfor %}
+        <div class="book-appointment">
+            <h2>Faire un rendez-vous</h2>
+            {{ form_start(form, {'attr': {'id': 'form'}}) }}
+            <div class="left-agileits-w3layouts same">
+                <div class="gaps">
+                    <p>Votre Nom</p>
+                    {{ form_widget(form.nom) }}
+                    <div id="nomErr"></div>
+                </div>
+                <div class="gaps">
+                    <p>Votre Prénom</p>
+                    {{ form_widget(form.prenom) }}
+                    <div id="prenomErr"></div>
+                </div>
+                <div class="gaps">
+                    <p>Adresse Email</p>
+                    {{ form_widget(form.email) }}
+                    <div id="eamilErr"></div>
+                </div>
+            </div>
+            <div class="right-agileinfo same">
+                <div class="gaps">
+                    <p>Service</p>
+                    <select class="book-form-control" id="service1" name="service[]" onchange="getOptions('service1','options1');">
+                        <option></option>
+                        {% for service in services %}
+                            <option value="{{ service.id }}">{{ service.nomService }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="gaps">
+                    <p>Options</p>
+                    <select class="book-form-control" multiple id="options1" name="options1[]">
+                        <option></option>
+                    </select>
+                </div>
+            </div>
+            <div class="right-agileinfo same">
+                <div id="services_zone"></div>
+                <div class="pull-right">
+                    <button class="btn btn-outline-success" id="ajout_service" type="button"
+                           name="ajout_service" onclick="ajoutService();" data-toggle="dropdown" data-placement="top"
+                            title="Ajouter un autre service" aria-haspopup="true">+</button>
+                    <button class="btn btn-outline-danger" id="remove_service" type="button"
+                           name="remove_service" onclick="removeService();" data-toggle="dropdown" data-placement="top"
+                            title="Supprimer le dernier service" aria-haspopup="true">-</button>
+                </div>
+            </div>
+            <input type="button" name="button" onclick="verifier()" value="Valider">
+            {{ form_end(form) }}
+        </div>
+    </div>
+    <!--copyright-->
+    <div class="copy w3ls">
+        <p>&copy; 2021 Centre de beauté</p>
+    </div>
+    <!--//copyright-->
+{% endblock %}
+{% block javascripts %}
+
+    <script type="text/javascript">
+
+        //function that display each service options
+        function getOptions(serv,opt) {
+            var service = document.getElementById(serv).value;
+            $.ajax({
+                type: 'POST',
+                data : 'service=' + service,
+                dataType: 'json',
+                url: '{{ path('request_options') }}',
+                success: function(data) {
+                    $("#"+opt).empty();
+
+                    if(data!=""){
+
+                        var len = data.length;
+                        for(var i=1; i<len; i++){
+                            var toAppend = "<option id="+ data[i]['id'] +">" + data[i]['nom'] + "</option>";
+                            $("#"+opt).append(toAppend);
+                        }
+                    }
+                }
+            });
+        }
+
+        var i=1;//initialisation nbr de service
+
+        //fonction pour ajouter une autre zone (service)
+        function ajoutService() {
+            i++;
+            var options="options"+i+"[]";//input name
+            var service="service[]";//input name
+            //id
+            var serviceId="service"+i;
+            var optionsId="options"+i;
+
+            var Z="servZ"+i;
+
+            $('#services_zone').append('<div class="gaps" id='+Z+'>' +
+                '<p>Service'+i+'</p>' +
+                '<select class="book-form-control" name='+service+' multiple="multiple" ' +
+                'id='+serviceId+' onchange=getOptions("'+serviceId+'","'+optionsId+'")>' +
+                '{% for service in services %}<option value="{{ service.id }}">{{ service.nomService }}</option> {% endfor %}'+
+                '</select>' +
+                '<p>Options</p>' +
+                '<select class="book-form-control" multiple="multiple" id="'+optionsId+'" name="'+options+'"></select>'+
+                '</div>');
+        }
+
+        //Funct qui supprime la derniere zone ajouter
+        function removeService() {
+            if(i>1){
+                var D="#servZ"+i;
+                $(D).remove();
+                i--;
+            }
+        }
+
+        //validation formulaire
+        function verifier(){
+            //recuperer les valeurs
+            var nom=document.getElementById("nom").value;
+            var prenom=document.getElementById("prenom").value;
+            var email=document.getElementById("email").value;
+
+            //verifier
+            if (nom ===''){
+                $("#nomErr").append('<p class="text-danger">Champs obligatoire</p>');
+                this.nom.focus();
+            }
+            else if (prenom ===''){
+                $("#prenomErr").append('<p class="text-danger">Champs obligatoire</p>');
+                this.prenom.focus();
+            }
+            else if (email ===''){
+                $("#emailErr").append('<p class="text-danger">Champs obligatoire</p>');
+                this.email.focus();
+            }
+            else {
+                document.forms['form'].submit();
+            }
+        }
+
+    </script>
+    <script type="text/javascript" src="{{ asset('js/jquery-2.1.4.min.js') }}"></script>
+{% endblock %}
+
+
+
