@@ -56,12 +56,12 @@ class DefaultController extends Controller
         // Envoi Email---------------------------
         $message = \Swift_Message::newInstance()
             ->setSubject('Centre de beauté **')
-            ->setFrom('khawla@starzelectronics.com')//email admin
+            ->setFrom('khawla@starzelectronics.com')//configured email
             ->setTo($rdv->getClient()->getEmail())
             ->setCharset('utf-8')
             ->setBody(
                 $this->renderView(
-                    'Emails/validationRDV.html.twig',
+                    'emails/validationRDV.html.twig',
                     ['rdv' => $rdv]
                 ),
                 'text/html'
@@ -109,78 +109,90 @@ class DefaultController extends Controller
 
         if ($form->isSubmitted()) {
 
-            $em = $this->getDoctrine()->getManager();
-            //create rendez-vous
-            $rdv= new Rendezvous();
-            $rdv->setClient($client);
-            $rdv->setStatut('en attente');
-
-            $services= $request->get("service");//get input
-
-            $k=1;
-            //service du rendez-vous  //TODO: multiple services
-            for ($j=0; $j<count($services); $j++){
-
-                $service=$this->get('doctrine.orm.entity_manager')
-                    ->getRepository(Service::class)
-                    ->findOneBy(['id'=>$services[$j]]);
-
-                //ajout service to DB
-                $service_rdv= new RdvService();
-                $service_rdv->setRdv($rdv);
-                $service_rdv->setService($service);
-
-                $em->persist($service_rdv);
-                $em->flush();
-
-                $options= $request->get("options".$k);//get input
-                $k++;
-                //ajout options de chaque service
-                for ($i = 0; $i < count($options); $i++) {
-                    $option=$this->get('doctrine.orm.entity_manager')
-                        ->getRepository(OptionService::class)
-                        ->findOneBy(['nom'=>$options[$i]]);
-
-                    $option_rdv= new RdvServOption();
-                    $option_rdv->setRdvService($service_rdv);
-                    $option_rdv->setOption($option);
-
-                    $em->persist($option_rdv);
-                    $em->flush();
-                }
-
-            }
-            $em->persist($client);
-            $em->flush();
-
-            // Create the message---------------------------------------
-            //TODO: déplacer à un service
-            $message = \Swift_Message::newInstance()
-                ->setSubject('Notif: Nouveau Rendez-vous')
-                ->setFrom($client->getEmail())
-                ->setTo('kaoulatouati@gmail.com')//email admin
-                ->setCharset('utf-8')
-                ->setBody(
-                    $this->renderView(
-                        'Emails/rendezvous.html.twig',
-                        ['name' => $client->getNom()]
-                    ),
-                    'text/html'
-                )
-            ;
-            $this->get('mailer')->send($message);
-
-            if($em) {
+            //check email
+            $exist=$this->get('doctrine.orm.entity_manager')
+                ->getRepository(Client::class)
+                ->findOneBy(['email'=>$client->getEmail()]);
+            if ($exist){
                 $this->addFlash(
-                    'notice_success',
-                    'votre demande a été prise en compte et sera traitée dès que possible'
+                    'error_synth',
+                    'Email existe déja !'
                 );
             }
             else{
-                $this->addFlash(
-                    'error_synth',
-                    'Une erreur technique est survenue, veuillez réessayer ultérieurement!'
-                );
+                $em = $this->getDoctrine()->getManager();
+                //create rendez-vous
+                $rdv= new Rendezvous();
+                $rdv->setClient($client);
+                $rdv->setStatut('en attente');
+
+                $services= $request->get("service");//get input
+
+                $k=1;//used to get options of each service
+                //service du rendez-vous  //TODO: multiple services
+                for ($j=0; $j<count($services); $j++){
+
+                    $service=$this->get('doctrine.orm.entity_manager')
+                        ->getRepository(Service::class)
+                        ->findOneBy(['id'=>$services[$j]]);
+
+                    //ajout service to DB
+                    $service_rdv= new RdvService();
+                    $service_rdv->setRdv($rdv);
+                    $service_rdv->setService($service);
+
+                    $em->persist($service_rdv);
+                    $em->flush();
+
+                    $options= $request->get("options".$k);//get input
+                    $k++;
+                    //ajout options de chaque service
+                    for ($i = 0; $i < count($options); $i++) {
+                        $option=$this->get('doctrine.orm.entity_manager')
+                            ->getRepository(OptionService::class)
+                            ->findOneBy(['nom'=>$options[$i]]);
+
+                        $option_rdv= new RdvServOption();
+                        $option_rdv->setRdvService($service_rdv);
+                        $option_rdv->setOption($option);
+
+                        $em->persist($option_rdv);
+                        $em->flush();
+                    }
+
+                }
+                $em->persist($client);
+                $em->flush();
+
+                // Create the message---------------------------------------
+                //TODO: déplacer à un service
+                $message = \Swift_Message::newInstance()
+                    ->setSubject('Notif: Nouveau Rendez-vous')
+                    ->setFrom('khawla@starzelectronics.com')//configured email
+                    ->setTo('kaoulatouati@gmail.com')//email admin
+                    ->setCharset('utf-8')
+                    ->setBody(
+                        $this->renderView(
+                            'emails/rendezvous.html.twig',
+                            ['name' => $client->getNom()]
+                        ),
+                        'text/html'
+                    )
+                ;
+                $this->get('mailer')->send($message);
+
+                if($em) {
+                    $this->addFlash(
+                        'notice_success',
+                        'votre demande a été prise en compte et sera traitée dès que possible'
+                    );
+                }
+                else{
+                    $this->addFlash(
+                        'error_synth',
+                        'Une erreur technique est survenue, veuillez réessayer ultérieurement!'
+                    );
+                }
             }
         }
         return $this->render('client/ajouter_rdv.html.twig',[

@@ -42,6 +42,7 @@
                             </tr>
                         {% endif %}
 
+                        {#{% for rdv in rdvs| sort((a, b) => a.statut <=> b.statut)  %}#}
                         {% for rdv in rdvs %}
                             <tr>
                                 <td>{{ rdv.id }}</td>
@@ -65,11 +66,16 @@
 
                                     {% endfor %}
                                 </td>
-                                <td>{{ rdv.statut }}</td>
+                                <td>
+                                    {% if rdv.statut == 'valider' %}
+                                        <span class="badge badge-success">{{ rdv.statut }}</span>
+                                    {% else %}
+                                        <span class="badge badge-warning">{{ rdv.statut }}</span>
+                                    {% endif %}
+                                </td>
                                 <td>
                                     <a href={{path('valider_RDV',{'id': rdv.id})}};><input type="button" value="Valider"
-                                        class="btn btn-primary"{% if rdv.statut == 'valider' %}disabled {% endif %} ></a>
-
+                                        class="btn btn-primary" {% if rdv.statut == 'valider' %}disabled {% endif %} ></a>
                                 </td>
                             </tr>
                         {% endfor %}

@@ -9,14 +9,14 @@
     </style>
 </head>
 <body>
-<div class="container-fluid">
+<div class="container">
     <div class="row">
-        <div class="col-sm">
+        <div class="col">
             <h6>Centre de beauté **</h6>
             <p>Adresse: ...</p>
             <p>Tél: ...</p>
         </div>
-        <div class="col-sm">
+        <div class="col">
             <h6>Destinataire:</h6>
             <p>{{ rdv.client.nom }} {{ rdv.client.prenom }}</p>
         </div>
@@ -49,11 +49,9 @@
             <td colspan="4" class="pull-right"> Total: ... &euro;</td>
         </tr>
     </table>
-
 </div>
-<div class="footer">
-    <hr>
-    <p>Fait à Paris, le {{ "now"|date("d/m/Y") }}</p>
-</div>
+<footer class="bg-light text-center text-lg-start">
+    <p >Fait à Paris, le {{ "now"|date("d/m/Y") }}</p>
+</footer>
 </body>
 </html>

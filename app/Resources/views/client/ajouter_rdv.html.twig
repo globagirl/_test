@@ -27,17 +27,14 @@
                 <div class="gaps">
                     <p>Votre Nom</p>
                     {{ form_widget(form.nom) }}
-                    <div id="nomErr"></div>
                 </div>
                 <div class="gaps">
                     <p>Votre Prénom</p>
                     {{ form_widget(form.prenom) }}
-                    <div id="prenomErr"></div>
                 </div>
                 <div class="gaps">
                     <p>Adresse Email</p>
                     {{ form_widget(form.email) }}
-                    <div id="eamilErr"></div>
                 </div>
             </div>
             <div class="right-agileinfo same">
@@ -53,7 +50,7 @@
                 <div class="gaps">
                     <p>Options</p>
                     <select class="book-form-control" multiple id="options1" name="options1[]">
-                        <option></option>
+                        <option value="" disabled selected>Options</option>
                     </select>
                 </div>
             </div>
@@ -79,11 +76,9 @@
     <!--//copyright-->
 {% endblock %}
 {% block javascripts %}
-
     <script type="text/javascript">
 
-        //function that display each service options
-        function getOptions(serv,opt) {
+        function getOptions(serv,opt) {//function that display each service options
             var service = document.getElementById(serv).value;
             $.ajax({
                 type: 'POST',
@@ -92,6 +87,7 @@
                 url: '{{ path('request_options') }}',
                 success: function(data) {
                     $("#"+opt).empty();
+                    $("#"+opt).append("<option disabled selected>Options</option>");
 
                     if(data!=""){
 
@@ -107,16 +103,14 @@
 
         var i=1;//initialisation nbr de service
 
-        //fonction pour ajouter une autre zone (service)
-        function ajoutService() {
+        function ajoutService() {//fonction pour ajouter une autre zone (service)
             i++;
             var options="options"+i+"[]";//input name
             var service="service[]";//input name
             //id
             var serviceId="service"+i;
             var optionsId="options"+i;
-
-            var Z="servZ"+i;
+            var Z="servZ"+i;//required for the remove funct
 
             $('#services_zone').append('<div class="gaps" id='+Z+'>' +
                 '<p>Service'+i+'</p>' +
@@ -129,8 +123,7 @@
                 '</div>');
         }
 
-        //Funct qui supprime la derniere zone ajouter
-        function removeService() {
+        function removeService() {//Funct qui supprime la derniere zone ajouter
             if(i>1){
                 var D="#servZ"+i;
                 $(D).remove();
@@ -138,27 +131,60 @@
             }
         }
 
-        //validation formulaire
-        function verifier(){
-            //recuperer les valeurs
-            var nom=document.getElementById("nom").value;
-            var prenom=document.getElementById("prenom").value;
-            var email=document.getElementById("email").value;
+        function verifier(){//validation formulaire
+            //remove all errors
+            $(".error").hide();
+            var hasError = false;
+            var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
 
-            //verifier
-            if (nom ===''){
-                $("#nomErr").append('<p class="text-danger">Champs obligatoire</p>');
-                this.nom.focus();
+            //recuperer les valeurs
+            var nomVal=document.getElementById("nom").value;
+            var prenomVal=document.getElementById("prenom").value;
+            var emailVal=document.getElementById("email").value;
+            var service1Val=document.getElementById("service1").value;
+            var options1Val=document.getElementById("options1").value;
+
+            //verification -----------------------
+            //check nom
+            if (nomVal ===''){
+                $("#nom").after('<small class="text-danger error">Champs obligatoire</small>');
+                hasError = true;
+            }else if (nomVal.length<2 || nomVal.length>50) {
+                $("#nom").after('<small class="text-danger error">Nom doit comprendre entre 2 et 50 caractères</small>');
+                hasError = true;
             }
-            else if (prenom ===''){
-                $("#prenomErr").append('<p class="text-danger">Champs obligatoire</p>');
-                this.prenom.focus();
+            //check prenom
+            if (prenomVal ===''){
+                $("#prenom").after('<small class="text-danger error">Champs obligatoire</small>');
+                hasError = true;
+            }else if (prenomVal.length<2 || prenomVal.length>50) {
+                $("#prenom").after('<small class="text-danger error">Prénom doit comprendre entre 2 et 50 caractères</small>');
+                hasError = true;
             }
-            else if (email ===''){
-                $("#emailErr").append('<p class="text-danger">Champs obligatoire</p>');
-                this.email.focus();
+            //check email
+            if (emailVal ===''){
+                $("#email").after('<small class="text-danger error">Champs obligatoire</small>');
+                hasError = true;
+            }else if(!emailReg.test(emailVal)) {
+                $("#email").after('<small class="text-danger error">Email invalid.</small>');
+                hasError = true;
+            }else if (emailVal.length>150) {
+                $("#email").after('<small class="text-danger error">Votre email ne doit pas dépassé 150 caractères</small>');
+                hasError = true;
             }
-            else {
+
+            //check selects
+            if (service1Val ===''){
+                $("#service1").after('<small class="text-danger error">Champs obligatoire</small>');
+                hasError = true;
+            }
+            if (options1Val ===''){
+                $("#options1").after('<small class="text-danger error">Champs obligatoire</small>');
+                hasError = true;
+            }
+
+            //if valid action submit form-------------------
+            if (hasError === false) {
                 document.forms['form'].submit();
             }
         }

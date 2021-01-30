@@ -61,7 +61,7 @@ h1 {
     background:rgba(20, 20, 21, 0.47);
     padding: 3em;
 }
-.book-appointment input[type="text"], .book-appointment input[type="email"], textarea {
+.book-appointment input[type="text"], .book-appointment input[type="email"] {
     width: 96.5%;
     color: #fff;
     outline: none;
@@ -73,10 +73,6 @@ h1 {
     margin: .3em 0em 1em;
     font-family: 'Signika', sans-serif;
     background: rgba(237, 237, 237, 0.54);
-}
-textarea {
-	resize:none;
-	height:25px
 }
 .book-appointment select.book-form-control {
     outline: none;
@@ -189,7 +185,7 @@ input[type=button]:hover {
 	.bg-agile {
 		width: 50%;
 	}
-	.book-appointment input[type="text"], .book-appointment input[type="date"], .book-appointment input[type="time"], .book-appointment input[type="email"], textarea {
+	.book-appointment input[type="text"], .book-appointment input[type="email"], .book-appointment select {
 		width: 96%;
 	}
 }

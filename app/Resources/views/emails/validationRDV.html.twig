@@ -8,18 +8,21 @@
     </style>
 </head>
 <body>
+<div class="container">
 <h1>Centre de beauté ** - Approbation du rendez-vous</h1>
 <hr><br>
 
-<h3>Votre rendez-vous a été approuvé.</h3>
-<h6>Information générale:</h6>
+<h2>Votre rendez-vous a été approuvé.</h2>
+    <h3>Rendez-vous: {{ rdv.id }}</h3>
 <ul>
-    <li><strong>Rendez-vous N° : {{ rdv.id }}</strong></li><br>
-    <li><strong>Nom et prénom: {{ rdv.client.nom }} {{ rdv.client.prenom }}</strong></li>
+    <li>Nom et prénom: {{ rdv.client.nom }} {{ rdv.client.prenom }}</li>
+    <li>Date/heure rendez-vous: ..</li>
 </ul>
 <p>Veuillez trouvez ci-joint votre bon de commande.</p>
+
 <hr>
 <p>Merci pour votre confiance.</p>
 <p>Envoyé à {{ rdv.client.email }}</p>
+</div>
 </body>
 </html>
