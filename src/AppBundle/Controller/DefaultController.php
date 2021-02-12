@@ -9,6 +9,10 @@ use AppBundle\Entity\RdvServOption;
 use AppBundle\Entity\Rendezvous;
 use AppBundle\Entity\Service;
 
+use AppBundle\Service\EmailGenerator;
+use AppBundle\Service\PdfGenerator;
+use AppBundle\Service\RdvServices;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -20,64 +24,37 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
-        //render home page
-        return $this->render('index.html.twig');
-
+        return $this->render('index.html.twig');//render home page
     }
 
     /**
      * @Route("/liste_RDV", name="liste_RDV")
      */
-    public function ConsultRDV(Request $request)
+    public function ConsultRDV(RdvServices $rdvServices)
     {
-        $rdv=$this->get('doctrine.orm.entity_manager')
-            ->getRepository(Rendezvous::class)
-            ->findAll();
-
-        return $this->render('admin/liste_rdv.html.twig',['rdvs'=>$rdv]);
+        $rdvs= $rdvServices->getAllRdv();
+        return $this->render('admin/liste_rdv.html.twig',['rdvs'=>$rdvs]);
     }
 
     /**
      * @Route("/valider_RDV", name="valider_RDV")
      */
-    public function validerRDV(Request $request)
+    public function validerRDV(Request $request,RdvServices $rdvServices, PdfGenerator $pdfGenerator, EmailGenerator $emailGenerator)
     {
         $id=$request -> get('id');//get path variable
-        $rdv=$this->get('doctrine.orm.entity_manager')
-            ->getRepository(Rendezvous::class)
-            ->findOneById($id);
 
-        //Generate PDF---------------------------
-        $html = $this->renderView("PdfTemplate/bon_commande.html.twig", ['rdv'=>$rdv]);
-        $filename = 'bonNum'.$rdv->getId().'.pdf';
-        $pdf = $this->get("knp_snappy.pdf")->getOutputFromHtml($html);
-        $attachement = \Swift_Attachment::newInstance($pdf, $filename, 'application/pdf' );
-
-        // Envoi Email---------------------------
-        $message = \Swift_Message::newInstance()
-            ->setSubject('Centre de beauté **')
-            ->setFrom('khawla@starzelectronics.com')//configured email
-            ->setTo($rdv->getClient()->getEmail())
-            ->setCharset('utf-8')
-            ->setBody(
-                $this->renderView(
-                    'emails/validationRDV.html.twig',
-                    ['rdv' => $rdv]
-                ),
-                'text/html'
-            )
-            ->attach($attachement)//join PDF
-        ;
-        $this->get('mailer')->send($message);
-        // Fin Envoi Email-----------------------
-
-        //update RDV statut----------------------
+        $rdv=$rdvServices->getRdvById($id);
         $rdv->setStatut('valider');
-        $em = $this->get('doctrine.orm.entity_manager');
-        $em->merge($rdv );
-        $em->flush();
-        //-----------------
-        if($em) {
+        $rdvServices->updateRdv($rdv);
+
+        //Generate PDF
+       $attachement= $pdfGenerator->generatePdf($rdv, 'bon_commande.html.twig');
+        // Envoi Email
+        $emailGenerator->generateEmail($rdv,$rdv->getClient()->getEmail(),
+            'Centre de beauté: Confirmation rendez-vous','validationRDV.html.twig',$attachement);
+
+        //update RDV
+        if($emailGenerator) {
             $this->addFlash(
                 'notice_success',
                 'Rendez-vous valider avec succée'
@@ -95,7 +72,7 @@ class DefaultController extends Controller
     /**
      * @Route("/ajouter_RDV", name="ajouter_RDV")
      */
-    public function ajouterRdvAction(Request $request)
+    public function ajouterRdvAction(Request $request,RdvServices $rdvServices, EmailGenerator $emailGenerator)
     {
         //generate customer form
         $client = new Client();
@@ -103,17 +80,11 @@ class DefaultController extends Controller
         $form->handleRequest($request);
 
         //select db all services
-        $allServices=$this->get('doctrine.orm.entity_manager')
-            ->getRepository(Service::class)
-            ->findAll();
+        $allServices=$rdvServices->getAllServices();
 
         if ($form->isSubmitted()) {
-
             //check email
-            $exist=$this->get('doctrine.orm.entity_manager')
-                ->getRepository(Client::class)
-                ->findOneBy(['email'=>$client->getEmail()]);
-            if ($exist){
+            if ($rdvServices->getClientByEmail($client->getEmail())){
                 $this->addFlash(
                     'error_synth',
                     'Email existe déja !'
@@ -129,9 +100,7 @@ class DefaultController extends Controller
                 $services= $request->get("service");//get input
 
                 $k=1;//used to get options of each service
-                //service du rendez-vous  //TODO: multiple services
                 for ($j=0; $j<count($services); $j++){
-
                     $service=$this->get('doctrine.orm.entity_manager')
                         ->getRepository(Service::class)
                         ->findOneBy(['id'=>$services[$j]]);
@@ -164,30 +133,16 @@ class DefaultController extends Controller
                 $em->persist($client);
                 $em->flush();
 
-                // Create the message---------------------------------------
-                //TODO: déplacer à un service
-                $message = \Swift_Message::newInstance()
-                    ->setSubject('Notif: Nouveau Rendez-vous')
-                    ->setFrom('khawla@starzelectronics.com')//configured email
-                    ->setTo('kaoulatouati@gmail.com')//email admin
-                    ->setCharset('utf-8')
-                    ->setBody(
-                        $this->renderView(
-                            'emails/rendezvous.html.twig',
-                            ['name' => $client->getNom()]
-                        ),
-                        'text/html'
-                    )
-                ;
-                $this->get('mailer')->send($message);
+                // Envoi Email
+                $emailGenerator->generateEmail($client->getNom(),'kaoulatouati@gmail.com',
+                    'Notif: Nouveau Rendez-vous','rendezvous.html.twig','');
 
                 if($em) {
                     $this->addFlash(
                         'notice_success',
                         'votre demande a été prise en compte et sera traitée dès que possible'
                     );
-                }
-                else{
+                }else{
                     $this->addFlash(
                         'error_synth',
                         'Une erreur technique est survenue, veuillez réessayer ultérieurement!'

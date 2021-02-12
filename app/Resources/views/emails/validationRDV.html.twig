@@ -13,16 +13,16 @@
 <hr><br>
 
 <h2>Votre rendez-vous a été approuvé.</h2>
-    <h3>Rendez-vous: {{ rdv.id }}</h3>
+    <h3>Rendez-vous: {{ data.id }}</h3>
 <ul>
-    <li>Nom et prénom: {{ rdv.client.nom }} {{ rdv.client.prenom }}</li>
+    <li>Nom et prénom: {{ data.client.nom }} {{ data.client.prenom }}</li>
     <li>Date/heure rendez-vous: ..</li>
 </ul>
 <p>Veuillez trouvez ci-joint votre bon de commande.</p>
 
 <hr>
 <p>Merci pour votre confiance.</p>
-<p>Envoyé à {{ rdv.client.email }}</p>
+<p>Envoyé à {{ data.client.email }}</p>
 </div>
 </body>
 </html>

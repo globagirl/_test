@@ -18,11 +18,11 @@
         </div>
         <div class="col">
             <h6>Destinataire:</h6>
-            <p>{{ rdv.client.nom }} {{ rdv.client.prenom }}</p>
+            <p>{{ data.client.nom }} {{ data.client.prenom }}</p>
         </div>
     </div>
     <hr>
-    <h1>Bon de commande N°: {{ rdv.id }}</h1>
+    <h1>Bon de commande N°: {{ data.id }}</h1>
     <table class="table table-bordered thead-dark">
         <tr>
             <td>Réf</td>
@@ -30,7 +30,7 @@
             <td>Quantité</td>
             <td>Prix</td>
         </tr>
-        {% for service in rdv.rdvServices %}
+        {% for service in data.rdvServices %}
             <tr>
                 <td>{{ service.service.id }}</td>
                 <td>{{ service.service.nomService }}
