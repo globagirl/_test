@@ -1,3 +1,30 @@
+Here's some screenshots:
+
+Get an appointment:
+
+![partie1pageClient](https://user-images.githubusercontent.com/38107859/111285427-5e95e000-85fe-11eb-9c2d-7cdf3ee1f39d.png)
+
+Email admin notification:
+
+![emailNotifAdmin](https://user-images.githubusercontent.com/38107859/111285521-74a3a080-85fe-11eb-8e60-58f12767d602.png)
+
+Confirmation Email:
+
+![emailRdvConfirmer](https://user-images.githubusercontent.com/38107859/111285657-9a30aa00-85fe-11eb-84e5-8aabcee44a8c.png)
+
+Attached PDF:
+
+![bonDeCommande](https://user-images.githubusercontent.com/38107859/111285604-8be28e00-85fe-11eb-863a-97e117c0be40.png)
+
+
+Consult & Confirm appointments:
+
+![pageAdmin](https://user-images.githubusercontent.com/38107859/111285437-6190d080-85fe-11eb-99ed-fcf848f7c364.png)
+
+
+
+Consult & Confirm appointments:
+
 Symfony Standard Edition
 ========================
 
